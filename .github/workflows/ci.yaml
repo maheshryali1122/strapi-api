@@ -29,6 +29,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME}}/strapi:${{ github.run_number }}
   deploy:
      runs-on: self-hosted 
+     needs: Build_Docker_image
      steps:
        - name: pull the docker image
          run: docker image pull ${{ secrets.DOCKERHUB_USERNAME }}/strapi:${{ github.run_number }}  
