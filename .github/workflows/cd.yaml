@@ -1,0 +1,19 @@
+name: CD pipeline for strapi application
+on:
+  workflow_run:
+    workflows: ["CI pipeline for strapi api"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+     runs-on: ip-172-31-19-121 
+     steps:
+       - name: pull the docker image
+         run: docker image pull ${{ secrets.DOCKERHUB_USERNAME }}/strapi:${{ github.run_number }}  
+
+       - name: Delete the old container
+         run: docker rm -f strapi-container || true
+       - name: Run the docker container
+         run: docker container run -d -p 1337:1337 ${{ secrets.DOCKERHUB_USERNAME }}/strapi:${{ github.run_number }}
+        
