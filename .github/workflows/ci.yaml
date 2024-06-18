@@ -28,7 +28,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME}}/strapi:${{ github.run_number }}
   deploy:
-     runs-on: ip-172-31-19-121 
+     runs-on: self-hosted 
      steps:
        - name: pull the docker image
          run: docker image pull ${{ secrets.DOCKERHUB_USERNAME }}/strapi:${{ github.run_number }}  
