@@ -1,4 +1,4 @@
-name: CI pipeline for strapi api
+name: CI CD pipeline for strapi api
 on: 
   push:
     branches:
