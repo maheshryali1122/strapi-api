@@ -32,5 +32,4 @@ jobs:
             "cd /srv/strapi-api && \
             pm2 stop strapi || true
             npm install && \
-            pm2 start npm --name 'strapi' -- run develop && \
-            pm2 save"
+            pm2 restart all"
