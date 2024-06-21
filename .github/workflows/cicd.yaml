@@ -30,6 +30,7 @@ jobs:
           chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} \
             "cd /srv/strapi-api && \
-            pm2 stop strapi || true
+            git pull origin main && \
+            pm2 stop strapi || true && \
             npm install && \
             pm2 restart all"
