@@ -1,9 +1,9 @@
-name: CI/CD pipeline for Strapi API
+name: Development pipeline
 
 on:
   push:
     branches:
-      - main
+      - mahesh-dev
 
 jobs:
   deploy:
@@ -12,27 +12,28 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Deploy application
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.USER_NAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          host: ${{ secrets.MAHESHR_SSH_HOST }}
+          username: ${{ secrets.MAHESHR_USER_NAME }}
+          key: ${{ secrets.MAHESHR_PRIVATE_KEY }}
+          port: ${{ secrets.MAHESHR_SSH_PORT }}
           script: |
-            cd /srv/strapi-api && \
-            echo "HOST=${{ secrets.HOST }}" > .env && \
-            echo "PORT=${{ secrets.PORT }}" >> .env && \
-            echo "APP_KEYS=${{ secrets.APP_KEYS }}" >> .env && \
-            echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}" >> .env && \
-            echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> .env && \
-            echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env && \
-            echo "DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}" >> .env && \
-            echo "DATABASE_FILENAME=${{ secrets.DATABASE_FILENAME }}" >> .env && \
-            git pull origin main && \
+            cd /srv/strapi && \
+            git checkout -f mahesh-dev && \
+            git pull origin mahesh-dev && \
+            echo "HOST=${{ secrets.MAHESHR_HOST }}" > .env && \
+            echo "PORT=${{ secrets.MAHESHR_PORT }}" >> .env && \
+            echo "APP_KEYS=${{ secrets.MAHESHR_APP_KEYS }}" >> .env && \
+            echo "API_TOKEN_SALT=${{ secrets.MAHESHR_API_TOKEN_SALT }}" >> .env && \
+            echo "ADMIN_JWT_SECRET=${{ secrets.MAHESHR_ADMIN_JWT_SECRET }}" >> .env && \
+            echo "TRANSFER_TOKEN_SALT=${{ secrets.MAHESHR_TRANSFER_TOKEN_SALT }}" >> .env && \
+            echo "DATABASE_CLIENT=${{ secrets.MAHESHR_DATABASE_CLIENT }}" >> .env && \
+            echo "DATABASE_FILENAME=${{ secrets.MAHESHR_DATABASE_FILENAME }}" >> .env && \
             pm2 stop all || true && \
-            npm install && \
+            sudo npm install && \
             npm run build && \
             pm2 restart all
         env:
