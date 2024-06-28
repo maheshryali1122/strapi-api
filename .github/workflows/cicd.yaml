@@ -22,10 +22,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /srv/strapi-api && \
-            git pull origin main && \
-            pm2 stop all || true && \
-            npm install && \
-            npm run build && \
             echo "HOST=${{ secrets.HOST }}" > .env && \
             echo "PORT=${{ secrets.PORT }}" >> .env && \
             echo "APP_KEYS=${{ secrets.APP_KEYS }}" >> .env && \
@@ -34,6 +30,10 @@ jobs:
             echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env && \
             echo "DATABASE_CLIENT=${{ secrets.DATABASE_CLIENT }}" >> .env && \
             echo "DATABASE_FILENAME=${{ secrets.DATABASE_FILENAME }}" >> .env && \
+            git pull origin main && \
+            pm2 stop all || true && \
+            npm install && \
+            npm run build && \
             pm2 restart all
         env:
           HOST: ${{ secrets.HOST }}
@@ -44,4 +44,3 @@ jobs:
           TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
           DATABASE_CLIENT: ${{ secrets.DATABASE_CLIENT }}
           DATABASE_FILENAME: ${{ secrets.DATABASE_FILENAME }}
-
